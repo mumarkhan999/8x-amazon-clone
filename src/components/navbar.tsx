@@ -12,12 +12,50 @@ export async function Navbar() {
 
   return (
     <header className="sticky top-0 z-20">
-      <div className="flex items-center gap-4 bg-zinc-900 px-4 py-2 text-white">
-        <Link href="/" className="shrink-0 text-xl font-bold tracking-tight">
+      <div className="flex flex-wrap items-center gap-x-3 gap-y-2 bg-zinc-900 px-4 py-2 text-white">
+        <Link href="/" className="order-1 shrink-0 text-xl font-bold tracking-tight">
           amazon<span className="text-orange-400">.clone</span>
         </Link>
 
-        <form action="/" method="GET" className="flex min-w-0 flex-1">
+        <div className="order-2 ml-auto flex shrink-0 items-center gap-3 text-sm md:order-3 md:ml-0">
+          {user ? (
+            <div className="flex items-center gap-3">
+              <Link href="/orders" className="leading-tight hover:underline">
+                <div className="hidden text-xs text-zinc-300 sm:block">
+                  Hello, {user.name}
+                </div>
+                <div className="font-bold">
+                  <span className="sm:hidden">Orders</span>
+                  <span className="hidden sm:inline">Returns &amp; Orders</span>
+                </div>
+              </Link>
+              <form action={logout}>
+                <button
+                  type="submit"
+                  className="rounded border border-zinc-600 px-2 py-1 text-xs hover:border-white"
+                >
+                  Sign out
+                </button>
+              </form>
+            </div>
+          ) : (
+            <Link href="/login" className="leading-tight hover:underline">
+              <div className="hidden text-xs text-zinc-300 sm:block">Hello, sign in</div>
+              <div className="font-bold">
+                <span className="sm:hidden">Account</span>
+                <span className="hidden sm:inline">Account &amp; Lists</span>
+              </div>
+            </Link>
+          )}
+
+          <CartBadge />
+        </div>
+
+        <form
+          action="/"
+          method="GET"
+          className="order-3 flex w-full min-w-0 md:order-2 md:w-auto md:flex-1"
+        >
           <input
             type="text"
             name="q"
@@ -32,45 +70,27 @@ export async function Navbar() {
             🔍
           </button>
         </form>
-
-        <div className="flex shrink-0 items-center gap-4 text-sm">
-          {user ? (
-            <div className="flex items-center gap-3">
-              <Link href="/orders" className="leading-tight hover:underline">
-                <div className="text-xs text-zinc-300">Hello, {user.name}</div>
-                <div className="font-bold">Returns &amp; Orders</div>
-              </Link>
-              <form action={logout}>
-                <button
-                  type="submit"
-                  className="rounded border border-zinc-600 px-2 py-1 text-xs hover:border-white"
-                >
-                  Sign out
-                </button>
-              </form>
-            </div>
-          ) : (
-            <Link href="/login" className="leading-tight hover:underline">
-              <div className="text-xs text-zinc-300">Hello, sign in</div>
-              <div className="font-bold">Account &amp; Lists</div>
-            </Link>
-          )}
-
-          <CartBadge />
-        </div>
       </div>
 
-      <nav className="flex gap-4 overflow-x-auto bg-zinc-800 px-4 py-1.5 text-xs text-zinc-100">
-        {categories.map((category) => (
-          <Link
-            key={category}
-            href={`/?category=${encodeURIComponent(category)}`}
-            className="shrink-0 hover:underline"
-          >
-            {category}
-          </Link>
-        ))}
-      </nav>
+      <div className="relative bg-zinc-800">
+        <nav
+          className="flex gap-4 overflow-x-auto px-4 py-1.5 text-xs whitespace-nowrap text-zinc-100 [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
+          style={{ WebkitOverflowScrolling: "touch" }}
+        >
+          {categories.map((category) => (
+            <Link
+              key={category}
+              href={`/?category=${encodeURIComponent(category)}`}
+              className="shrink-0 hover:underline"
+            >
+              {category}
+            </Link>
+          ))}
+        </nav>
+        {/* Fade hint that this row scrolls horizontally — categories can
+            overflow the viewport on mobile with no visible scrollbar. */}
+        <div className="pointer-events-none absolute top-0 right-0 h-full w-8 bg-gradient-to-l from-zinc-800 to-transparent" />
+      </div>
     </header>
   );
 }

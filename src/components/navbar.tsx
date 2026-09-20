@@ -2,6 +2,7 @@ import Link from "next/link";
 import { getCurrentUser } from "@/lib/dal";
 import { getCategories } from "@/lib/products";
 import { CartBadge } from "./cart-badge";
+import { CategoryMenu } from "./category-menu";
 import { logout } from "@/lib/actions/auth";
 
 export async function Navbar() {
@@ -72,25 +73,22 @@ export async function Navbar() {
         </form>
       </div>
 
-      <div className="relative bg-zinc-800">
-        <nav
-          className="flex gap-4 overflow-x-auto px-4 py-1.5 text-xs whitespace-nowrap text-zinc-100 [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
-          style={{ WebkitOverflowScrolling: "touch" }}
-        >
-          {categories.map((category) => (
-            <Link
-              key={category}
-              href={`/?category=${encodeURIComponent(category)}`}
-              className="shrink-0 hover:underline"
-            >
-              {category}
-            </Link>
-          ))}
-        </nav>
-        {/* Fade hint that this row scrolls horizontally — categories can
-            overflow the viewport on mobile with no visible scrollbar. */}
-        <div className="pointer-events-none absolute top-0 right-0 h-full w-8 bg-gradient-to-l from-zinc-800 to-transparent" />
-      </div>
+      {/* Amazon's own mobile web tucks categories behind a menu rather than
+          a scrollable strip — a horizontal scroller has no affordance
+          signaling it's swipeable. Desktop keeps the always-visible row,
+          since it fits and mouse/trackpad scroll is a natural interaction. */}
+      <nav className="hidden gap-4 overflow-x-auto bg-zinc-800 px-4 py-1.5 text-xs text-zinc-100 md:flex">
+        {categories.map((category) => (
+          <Link
+            key={category}
+            href={`/?category=${encodeURIComponent(category)}`}
+            className="shrink-0 hover:underline"
+          >
+            {category}
+          </Link>
+        ))}
+      </nav>
+      <CategoryMenu categories={categories} />
     </header>
   );
 }

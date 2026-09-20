@@ -17,6 +17,7 @@ export type CartItem = {
 };
 
 const STORAGE_KEY = "8x-amazon-clone:cart";
+const EMPTY_ITEMS: CartItem[] = [];
 
 type Listener = () => void;
 
@@ -56,7 +57,7 @@ function createCartStore() {
       return items;
     },
     getServerSnapshot() {
-      return [] as CartItem[];
+      return EMPTY_ITEMS;
     },
     addItem(item: Omit<CartItem, "quantity">, quantity = 1) {
       const existing = items.find((i) => i.productId === item.productId);

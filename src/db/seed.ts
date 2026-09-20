@@ -1,5 +1,12 @@
-import { db } from "./index";
+// Standalone script run via `tsx`, outside Next's build — can't import
+// "./index" since it pulls in the `server-only` guard, which throws
+// unconditionally outside Next's bundler.
+import { drizzle } from "drizzle-orm/neon-http";
+import { neon } from "@neondatabase/serverless";
 import { products } from "./schema";
+
+const sql = neon(process.env.DATABASE_URL!);
+const db = drizzle(sql, { schema: { products } });
 
 function img(seed: string) {
   return `https://picsum.photos/seed/${seed}/600/600`;

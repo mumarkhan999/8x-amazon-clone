@@ -13,7 +13,11 @@ export async function getProducts({
   const conditions = [];
   if (q) {
     conditions.push(
-      or(ilike(products.title, `%${q}%`), ilike(products.description, `%${q}%`))
+      or(
+        ilike(products.title, `%${q}%`),
+        ilike(products.description, `%${q}%`),
+        ilike(products.category, `%${q}%`)
+      )
     );
   }
   if (category) {

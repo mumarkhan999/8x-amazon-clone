@@ -53,6 +53,10 @@ about what a 24-hour build should and shouldn't include.
    - `STRIPE_WEBHOOK_SECRET` — from `stripe listen --forward-to localhost:3000/api/webhooks/stripe`
      (Stripe CLI) for local dev, or the deployed webhook endpoint's
      signing secret in production.
+
+   Stripe redirect URLs are derived from each request's own origin, not an
+   env var, so they're correct in local dev, preview, and production
+   without extra config.
 3. **Push the schema**: `npm run db:push`
 4. **Seed the catalog**: `npm run db:seed`
 5. **Run the dev server**: `npm run dev` → http://localhost:3000

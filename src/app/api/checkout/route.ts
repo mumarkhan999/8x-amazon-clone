@@ -76,7 +76,10 @@ export async function POST(request: Request) {
     }))
   );
 
-  const appUrl = process.env.NEXT_PUBLIC_APP_URL ?? new URL(request.url).origin;
+  // Derive from the incoming request rather than NEXT_PUBLIC_APP_URL — a
+  // request handler always knows its real origin, so this can't drift out
+  // of sync with wherever the app is actually deployed.
+  const appUrl = new URL(request.url).origin;
 
   const session = await stripe.checkout.sessions.create({
     mode: "payment",
